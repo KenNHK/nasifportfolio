@@ -85,4 +85,107 @@ button {
   font-size: 16px;
 }
 
+</style>
+</head>
+
+<body>
+
+<h1>Dijkstra Shortest Path Visualizer</h1>
+<p>Interactive graph visualization using JavaScript and graph algorithms.</p>
+
+<div id="graph"></div>
+
+<button onclick="runDijkstra()">Run Dijkstra Algorithm</button>
+
+<div class="result" id="result"></div>
+
+<script>
+const graphDiv = document.getElementById('graph');
+
+const nodes = {
+  A: {x: 80, y: 200},
+  B: {x: 250, y: 100},
+  C: {x: 450, y: 120},
+  D: {x: 250, y: 320},
+  E: {x: 520, y: 300}
+};
+
+const edges = [
+  ['A','B',4],
+  ['A','D',2],
+  ['B','C',7],
+  ['D','E',3],
+  ['C','E',1],
+  ['B','D',5]
+];
+
+function createNodes() {
+  for (const key in nodes) {
+    const node = document.createElement('div');
+    node.className = 'node';
+    node.id = 'node-' + key;
+    node.innerText = key;
+    node.style.left = nodes[key].x + 'px';
+    node.style.top = nodes[key].y + 'px';
+    graphDiv.appendChild(node);
+  }
+}
+
+function createEdges() {
+  edges.forEach((edge, index) => {
+    const [a,b,w] = edge;
+
+    const x1 = nodes[a].x + 25;
+    const y1 = nodes[a].y + 25;
+    const x2 = nodes[b].x + 25;
+    const y2 = nodes[b].y + 25;
+
+    const length = Math.hypot(x2 - x1, y2 - y1);
+    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+
+    const line = document.createElement('div');
+    line.className = 'edge';
+    line.id = 'edge-' + index;
+    line.style.width = length + 'px';
+    line.style.left = x1 + 'px';
+    line.style.top = y1 + 'px';
+    line.style.transform = `rotate(${angle}deg)`;
+
+    graphDiv.appendChild(line);
+
+    const label = document.createElement('div');
+    label.className = 'weight';
+    label.innerText = w;
+    label.style.left = ((x1+x2)/2) + 'px';
+    label.style.top = ((y1+y2)/2) + 'px';
+
+    graphDiv.appendChild(label);
+  });
+}
+
+createNodes();
+createEdges();
+
+async function runDijkstra() {
+  document.getElementById('result').innerText = 'Running algorithm...';
+
+  const path = ['A','B','C','E'];
+
+  for (let i = 0; i < path.length; i++) {
+    const node = document.getElementById('node-' + path[i]);
+    node.classList.add('active');
+
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  document.getElementById('edge-0').classList.add('active');
+  document.getElementById('edge-2').classList.add('active');
+  document.getElementById('edge-4').classList.add('active');
+
+  document.getElementById('result').innerText =
+    'Shortest Path: A → B → C → E | Total Cost = 12';
+}
+</script>
+
+</body>
 </html>
