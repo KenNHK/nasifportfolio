@@ -3,86 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dijkstra Visualizer</title>
+<title>Dijkstra Algorithm Visualizer</title>
+
 <style>
-body {
-  margin: 0;
-  background: #0f1115;
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-h1 {
-  margin-bottom: 10px;
+body{
+background:#0d1117;
+color:white;
+font-family:Arial,sans-serif;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:40px 20px;
 }
 
-p {
-  color: #a0a0a0;
-  margin-bottom: 30px;
+h1{
+font-size:42px;
+margin-bottom:10px;
 }
 
-#graph {
-  position: relative;
-  width: 700px;
-  height: 500px;
-  border: 1px solid #222;
-  background: #151922;
-  border-radius: 16px;
+.subtitle{
+color:#9ca3af;
+margin-bottom:30px;
+text-align:center;
+max-width:700px;
+line-height:1.6;
 }
 
-.node {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #1f2937;
-  border: 2px solid #4ade80;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  transition: 0.4s;
+.controls{
+display:flex;
+gap:16px;
+flex-wrap:wrap;
+justify-content:center;
+margin-bottom:30px;
 }
 
-.node.active {
-  background: #4ade80;
-  color: black;
-  transform: scale(1.1);
+select,button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+font-size:15px;
 }
 
-.edge {
-  position: absolute;
-  background: rgba(255,255,255,0.2);
-  transform-origin: left center;
-  height: 3px;
+select{
+background:#1f2937;
+color:white;
 }
 
-.edge.active {
-  background: #4ade80;
-  height: 4px;
+button{
+background:#22c55e;
+color:black;
+font-weight:bold;
+cursor:pointer;
+transition:0.2s;
 }
 
-.weight {
-  position: absolute;
-  color: #facc15;
-  font-size: 14px;
+button:hover{
+transform:translateY(-2px);
 }
 
-button {
-  margin-top: 30px;
-  padding: 14px 30px;
-  border: none;
-  border-radius: 8px;
-  background: #4ade80;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 16px;
+#graph{
+position:relative;
+width:900px;
+height:600px;
+background:#111827;
+border-radius:20px;
+border:1px solid #1f2937;
+overflow:hidden;
+}
+
+.node{
+position:absolute;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#1f2937;
+border:3px solid #374151;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:18px;
+transition:0.4s;
+z-index:2;
+}
+
+.node.visited{
+background:#2563eb;
+border-color:#60a5fa;
+transform:scale(1.1);
+}
+
+.node.path{
+background:#22c55e;
+border-color:#86efac;
+color:black;
+transform:scale(1.15);
+}
+
+.edge{
+position:absolute;
+height:4px;
+background:#374151;
+transform-origin:left center;
+z-index:1;
+transition:0.4s;
+}
+
+.edge.active{
+background:#22c55e;
+height:5px;
+}
+
+.weight{
+position:absolute;
+font-size:14px;
+color:#facc15;
+background:#0d1117;
+padding:2px 6px;
+border-radius:6px;
+z-index:3;
+}
+
+.result-box{
+margin-top:30px;
+padding:20px;
+background:#111827;
+border:1px solid #1f2937;
+border-radius:14px;
+width:900px;
+}
+
+.result-title{
+font-size:20px;
+margin-bottom:12px;
+}
+
+.result-text{
+color:#d1d5db;
+line-height:1.7;
+}
+
+@media(max-width:950px){
+
+#graph{
+width:100%;
+height:500px;
+}
+
+.result-box{
+width:100%;
+}
+
 }
 
 </style>
@@ -90,101 +169,278 @@ button {
 
 <body>
 
-<h1>Dijkstra Shortest Path Visualizer</h1>
-<p>Interactive graph visualization using JavaScript and graph algorithms.</p>
+<h1>Dijkstra Algorithm Visualizer</h1>
+
+<p class="subtitle">
+Interactive shortest path visualization using graph theory and Dijkstra’s Algorithm.
+Select a source and destination node to compute the shortest route dynamically.
+</p>
+
+<div class="controls">
+
+<select id="source">
+<option value="A">Source: A</option>
+<option value="B">Source: B</option>
+<option value="C">Source: C</option>
+<option value="D">Source: D</option>
+<option value="E">Source: E</option>
+<option value="F">Source: F</option>
+</select>
+
+<select id="destination">
+<option value="A">Destination: A</option>
+<option value="B">Destination: B</option>
+<option value="C">Destination: C</option>
+<option value="D">Destination: D</option>
+<option value="E">Destination: E</option>
+<option value="F">Destination: F</option>
+</select>
+
+<button onclick="runDijkstra()">
+Run Algorithm
+</button>
+
+<button onclick="resetGraph()">
+Reset
+</button>
+
+</div>
 
 <div id="graph"></div>
 
-<button onclick="runDijkstra()">Run Dijkstra Algorithm</button>
+<div class="result-box">
 
-<div class="result" id="result"></div>
+<div class="result-title">
+Algorithm Output
+</div>
+
+<div class="result-text" id="result">
+Select nodes and run the algorithm.
+</div>
+
+</div>
 
 <script>
-const graphDiv = document.getElementById('graph');
 
-const nodes = {
-  A: {x: 80, y: 200},
-  B: {x: 250, y: 100},
-  C: {x: 450, y: 120},
-  D: {x: 250, y: 320},
-  E: {x: 520, y: 300}
+const graphElement=document.getElementById("graph");
+
+const nodes={
+A:{x:80,y:250},
+B:{x:260,y:100},
+C:{x:500,y:120},
+D:{x:260,y:400},
+E:{x:550,y:380},
+F:{x:760,y:250}
 };
 
-const edges = [
-  ['A','B',4],
-  ['A','D',2],
-  ['B','C',7],
-  ['D','E',3],
-  ['C','E',1],
-  ['B','D',5]
+const edges=[
+["A","B",4],
+["A","D",2],
+["B","C",5],
+["B","D",1],
+["C","F",6],
+["D","E",8],
+["E","F",2],
+["C","E",3]
 ];
 
-function createNodes() {
-  for (const key in nodes) {
-    const node = document.createElement('div');
-    node.className = 'node';
-    node.id = 'node-' + key;
-    node.innerText = key;
-    node.style.left = nodes[key].x + 'px';
-    node.style.top = nodes[key].y + 'px';
-    graphDiv.appendChild(node);
-  }
+const adjacency={};
+
+for(const node in nodes){
+adjacency[node]=[];
 }
 
-function createEdges() {
-  edges.forEach((edge, index) => {
-    const [a,b,w] = edge;
+edges.forEach(([a,b,w])=>{
+adjacency[a].push({node:b,weight:w});
+adjacency[b].push({node:a,weight:w});
+});
 
-    const x1 = nodes[a].x + 25;
-    const y1 = nodes[a].y + 25;
-    const x2 = nodes[b].x + 25;
-    const y2 = nodes[b].y + 25;
+function createGraph(){
 
-    const length = Math.hypot(x2 - x1, y2 - y1);
-    const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+graphElement.innerHTML="";
 
-    const line = document.createElement('div');
-    line.className = 'edge';
-    line.id = 'edge-' + index;
-    line.style.width = length + 'px';
-    line.style.left = x1 + 'px';
-    line.style.top = y1 + 'px';
-    line.style.transform = `rotate(${angle}deg)`;
+edges.forEach(([a,b,w],index)=>{
 
-    graphDiv.appendChild(line);
+const x1=nodes[a].x+30;
+const y1=nodes[a].y+30;
 
-    const label = document.createElement('div');
-    label.className = 'weight';
-    label.innerText = w;
-    label.style.left = ((x1+x2)/2) + 'px';
-    label.style.top = ((y1+y2)/2) + 'px';
+const x2=nodes[b].x+30;
+const y2=nodes[b].y+30;
 
-    graphDiv.appendChild(label);
-  });
+const length=Math.hypot(x2-x1,y2-y1);
+
+const angle=Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+
+const edge=document.createElement("div");
+
+edge.className="edge";
+edge.id="edge-"+a+b;
+
+edge.style.width=length+"px";
+edge.style.left=x1+"px";
+edge.style.top=y1+"px";
+edge.style.transform=`rotate(${angle}deg)`;
+
+graphElement.appendChild(edge);
+
+const label=document.createElement("div");
+
+label.className="weight";
+label.innerText=w;
+
+label.style.left=((x1+x2)/2)+"px";
+label.style.top=((y1+y2)/2)+"px";
+
+graphElement.appendChild(label);
+
+});
+
+for(const key in nodes){
+
+const node=document.createElement("div");
+
+node.className="node";
+node.id="node-"+key;
+
+node.innerText=key;
+
+node.style.left=nodes[key].x+"px";
+node.style.top=nodes[key].y+"px";
+
+graphElement.appendChild(node);
+
 }
 
-createNodes();
-createEdges();
-
-async function runDijkstra() {
-  document.getElementById('result').innerText = 'Running algorithm...';
-
-  const path = ['A','B','C','E'];
-
-  for (let i = 0; i < path.length; i++) {
-    const node = document.getElementById('node-' + path[i]);
-    node.classList.add('active');
-
-    await new Promise(r => setTimeout(r, 800));
-  }
-
-  document.getElementById('edge-0').classList.add('active');
-  document.getElementById('edge-2').classList.add('active');
-  document.getElementById('edge-4').classList.add('active');
-
-  document.getElementById('result').innerText =
-    'Shortest Path: A → B → C → E | Total Cost = 12';
 }
+
+createGraph();
+
+function resetGraph(){
+
+document.querySelectorAll(".node").forEach(node=>{
+node.classList.remove("visited","path");
+});
+
+document.querySelectorAll(".edge").forEach(edge=>{
+edge.classList.remove("active");
+});
+
+document.getElementById("result").innerHTML=
+"Select nodes and run the algorithm.";
+
+}
+
+async function runDijkstra(){
+
+resetGraph();
+
+const source=document.getElementById("source").value;
+const destination=document.getElementById("destination").value;
+
+const distances={};
+const previous={};
+const visited={};
+
+for(const node in nodes){
+distances[node]=Infinity;
+previous[node]=null;
+visited[node]=false;
+}
+
+distances[source]=0;
+
+while(true){
+
+let current=null;
+let shortest=Infinity;
+
+for(const node in distances){
+
+if(!visited[node] && distances[node]<shortest){
+
+shortest=distances[node];
+current=node;
+
+}
+
+}
+
+if(current===null) break;
+
+visited[current]=true;
+
+document.getElementById("node-"+current)
+.classList.add("visited");
+
+await sleep(600);
+
+if(current===destination) break;
+
+for(const neighbor of adjacency[current]){
+
+const distance=
+distances[current]+neighbor.weight;
+
+if(distance<distances[neighbor.node]){
+
+distances[neighbor.node]=distance;
+
+previous[neighbor.node]=current;
+
+}
+
+}
+
+}
+
+const path=[];
+
+let current=destination;
+
+while(current){
+
+path.unshift(current);
+current=previous[current];
+
+}
+
+for(let i=0;i<path.length;i++){
+
+document.getElementById("node-"+path[i])
+.classList.add("path");
+
+if(i<path.length-1){
+
+const a=path[i];
+const b=path[i+1];
+
+const edge1=document.getElementById("edge-"+a+b);
+const edge2=document.getElementById("edge-"+b+a);
+
+if(edge1) edge1.classList.add("active");
+if(edge2) edge2.classList.add("active");
+
+}
+
+await sleep(500);
+
+}
+
+document.getElementById("result").innerHTML=`
+
+<strong>Source:</strong> ${source}<br>
+<strong>Destination:</strong> ${destination}<br>
+<strong>Shortest Distance:</strong> ${distances[destination]}<br>
+<strong>Path:</strong> ${path.join(" → ")}
+
+`;
+
+}
+
+function sleep(ms){
+return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
 </script>
 
 </body>
