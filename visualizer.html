@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dijkstra Visualizer</title>
+<style>
+body {
+  margin: 0;
+  background: #0f1115;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+p {
+  color: #a0a0a0;
+  margin-bottom: 30px;
+}
+
+#graph {
+  position: relative;
+  width: 700px;
+  height: 500px;
+  border: 1px solid #222;
+  background: #151922;
+  border-radius: 16px;
+}
+
+.node {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #1f2937;
+  border: 2px solid #4ade80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  transition: 0.4s;
+}
+
+.node.active {
+  background: #4ade80;
+  color: black;
+  transform: scale(1.1);
+}
+
+.edge {
+  position: absolute;
+  background: rgba(255,255,255,0.2);
+  transform-origin: left center;
+  height: 3px;
+}
+
+.edge.active {
+  background: #4ade80;
+  height: 4px;
+}
+
+.weight {
+  position: absolute;
+  color: #facc15;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 30px;
+  padding: 14px 30px;
+  border: none;
+  border-radius: 8px;
+  background: #4ade80;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+</html>
