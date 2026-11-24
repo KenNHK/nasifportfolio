@@ -1,25 +1,3 @@
-/*
- * ============================================================
- *  Graph Shortest Path — Dijkstra's Algorithm
- *  Author  : Nasif Hasan
- *  Language: C99
- *  Project : Portfolio — Algorithms & Data Structures
- * ============================================================
- *
- *  Finds the shortest path between two nodes in a weighted,
- *  undirected graph using Dijkstra's greedy algorithm.
- *
- *  Complexity:
- *    Time  — O(V²)  with adjacency matrix + linear scan
- *    Space — O(V²)  for the adjacency matrix
- *
- *  Compile:
- *    gcc -std=c99 -Wall -o graph graph_shortest_path.c
- *
- *  Run:
- *    ./graph
- * ============================================================
- */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,21 +5,20 @@
 #include <limits.h>
 #include <string.h>
 
-/* ── Constants ─────────────────────────────────────────────── */
 #define MAX_VERTICES 100
 #define INF          INT_MAX
 #define MAX_LABEL    8
 
-/* ── Data Structures ───────────────────────────────────────── */
+
 
 typedef struct {
     int  n_vertices;
     int  n_edges;
-    int  adj[MAX_VERTICES][MAX_VERTICES];  /* adjacency matrix; 0 = no edge */
-    char labels[MAX_VERTICES][MAX_LABEL];  /* human-readable node names     */
+    int  adj[MAX_VERTICES][MAX_VERTICES];  
+    char labels[MAX_VERTICES][MAX_LABEL]; 
 } Graph;
 
-/* ── Prototypes ────────────────────────────────────────────── */
+
 void graph_init      (Graph *g);
 void graph_add_edge  (Graph *g, int u, int v, int weight);
 int  graph_node_index(Graph *g, const char *label);
@@ -53,9 +30,6 @@ void print_banner    (void);
 void run_demo        (void);
 void run_interactive (void);
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Graph initialisation                                        */
-/* ─────────────────────────────────────────────────────────── */
 void graph_init(Graph *g) {
     g->n_vertices = 0;
     g->n_edges    = 0;
@@ -64,9 +38,6 @@ void graph_init(Graph *g) {
             g->adj[i][j] = 0;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Add a node; returns its index                              */
-/* ─────────────────────────────────────────────────────────── */
 int graph_add_node(Graph *g, const char *label) {
     if (g->n_vertices >= MAX_VERTICES) {
         fprintf(stderr, "Error: vertex limit (%d) reached.\n", MAX_VERTICES);
@@ -78,7 +49,7 @@ int graph_add_node(Graph *g, const char *label) {
     return idx;
 }
 
-/* Look up node index by label; returns -1 if not found */
+
 int graph_node_index(Graph *g, const char *label) {
     for (int i = 0; i < g->n_vertices; i++)
         if (strcmp(g->labels[i], label) == 0)
@@ -86,9 +57,7 @@ int graph_node_index(Graph *g, const char *label) {
     return -1;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Add an undirected weighted edge                            */
-/* ─────────────────────────────────────────────────────────── */
+
 void graph_add_edge(Graph *g, int u, int v, int weight) {
     if (u < 0 || v < 0 || u >= g->n_vertices || v >= g->n_vertices) {
         fprintf(stderr, "Error: invalid vertex index.\n");
@@ -102,9 +71,7 @@ void graph_add_edge(Graph *g, int u, int v, int weight) {
     g->n_edges++;
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Print graph structure                                       */
-/* ─────────────────────────────────────────────────────────── */
+
 void print_graph(Graph *g) {
     printf("\nGraph: %d vertices, %d edges\n", g->n_vertices, g->n_edges);
     printf("--------------------------------------------------\n");
@@ -120,9 +87,7 @@ void print_graph(Graph *g) {
     printf("--------------------------------------------------\n");
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Reconstruct and print path via back-tracking prev[]        */
-/* ─────────────────────────────────────────────────────────── */
+
 void print_path(int prev[], int dst, Graph *g) {
     if (prev[dst] == -1) {
         printf("[%s]", g->labels[dst]);
@@ -132,18 +97,13 @@ void print_path(int prev[], int dst, Graph *g) {
     printf(" -> [%s]", g->labels[dst]);
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Dijkstra's Shortest Path Algorithm                         */
-/*                                                             */
-/*  src — source vertex index                                  */
-/*  dst — destination vertex index                             */
-/* ─────────────────────────────────────────────────────────── */
-void dijkstra(Graph *g, int src, int dst) {
-    int  dist[MAX_VERTICES];    /* shortest distance from src        */
-    int  prev[MAX_VERTICES];    /* previous node in optimal path     */
-    bool visited[MAX_VERTICES]; /* has this node been finalised?     */
 
-    /* ── Step 1: Initialise ────────────────────────────────── */
+void dijkstra(Graph *g, int src, int dst) {
+    int  dist[MAX_VERTICES];    
+    int  prev[MAX_VERTICES];    
+    bool visited[MAX_VERTICES]; 
+
+   
     for (int i = 0; i < g->n_vertices; i++) {
         dist[i]    = INF;
         prev[i]    = -1;
@@ -153,10 +113,10 @@ void dijkstra(Graph *g, int src, int dst) {
 
     printf("\n  [INIT] dist[%s] = 0, all others = INF\n\n", g->labels[src]);
 
-    /* ── Step 2: Main loop — relax V-1 times ──────────────── */
+   
     for (int iter = 0; iter < g->n_vertices - 1; iter++) {
 
-        /* Find unvisited vertex with minimum distance (greedy pick) */
+      
         int u   = -1;
         int min = INF;
         for (int i = 0; i < g->n_vertices; i++) {
@@ -166,18 +126,18 @@ void dijkstra(Graph *g, int src, int dst) {
             }
         }
 
-        if (u == -1) break;          /* remaining nodes are unreachable */
+        if (u == -1) break;        
         visited[u] = true;
 
         printf("  [VISIT] node [%s]  dist=%d\n", g->labels[u], dist[u]);
 
-        if (u == dst) break;         /* early exit — destination reached */
+        if (u == dst) break;         
 
-        /* Relax all edges from u */
+      
         for (int v = 0; v < g->n_vertices; v++) {
-            if (visited[v])        continue; /* already finalised */
-            if (g->adj[u][v] == 0) continue; /* no edge */
-            if (dist[u] == INF)    continue; /* u unreachable    */
+            if (visited[v])        continue; 
+            if (g->adj[u][v] == 0) continue; 
+            if (dist[u] == INF)    continue; 
 
             int alt = dist[u] + g->adj[u][v];
 
@@ -192,7 +152,6 @@ void dijkstra(Graph *g, int src, int dst) {
         }
     }
 
-    /* ── Step 3: Report result ─────────────────────────────── */
     printf("\n--------------------------------------------------\n");
     if (dist[dst] == INF) {
         printf("  Result : No path from [%s] to [%s].\n",
@@ -208,20 +167,18 @@ void dijkstra(Graph *g, int src, int dst) {
     printf("--------------------------------------------------\n");
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Demo — pre-built example graph (8 nodes, 12 edges)         */
-/* ─────────────────────────────────────────────────────────── */
+
 void run_demo(void) {
     Graph g;
     graph_init(&g);
 
-    /* Add nodes A through H */
+    
     const char *node_names[] = {"A","B","C","D","E","F","G","H"};
     int n = sizeof(node_names) / sizeof(node_names[0]);
     for (int i = 0; i < n; i++)
         graph_add_node(&g, node_names[i]);
 
-    /* Add edges */
+    
     graph_add_edge(&g, 0, 1,  4);   /* A-B */
     graph_add_edge(&g, 0, 3,  2);   /* A-D */
     graph_add_edge(&g, 1, 2,  5);   /* B-C */
@@ -237,14 +194,12 @@ void run_demo(void) {
 
     print_graph(&g);
 
-    /* Find shortest path: A -> H */
+    
     printf("\nFinding shortest path: [A] -> [H]\n");
     dijkstra(&g, 0, 7);
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Interactive mode — user builds own graph                   */
-/* ─────────────────────────────────────────────────────────── */
+
 void run_interactive(void) {
     Graph g;
     graph_init(&g);
@@ -307,9 +262,9 @@ void run_interactive(void) {
     dijkstra(&g, src, dst);
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Banner                                                      */
-/* ─────────────────────────────────────────────────────────── */
+
+//banner
+
 void print_banner(void) {
     printf("==================================================\n");
     printf("   Graph Shortest Path — Dijkstra's Algorithm\n");
@@ -317,9 +272,8 @@ void print_banner(void) {
     printf("==================================================\n");
 }
 
-/* ─────────────────────────────────────────────────────────── */
-/*  Entry Point                                                 */
-/* ─────────────────────────────────────────────────────────── */
+//entry
+
 int main(void) {
     print_banner();
 
