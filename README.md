@@ -1,26 +1,21 @@
-**Shortest Path Visualizer**
+# Nasif Hasan — Portfolio
 
-An interactive shortest path visualizer built using HTML, CSS, JavaScript, and C concepts for a university project.
+Personal portfolio of **Nasif Hasan**, Junior Software Developer at Zavino, equal Co-Founder & Co-Owner of Ankab.org with Afia Antara, and CSE undergraduate at North South University.
 
-**Features**
+**Live Site:** https://kennhk.github.io/nasifportfolio/
 
-Create weighted graphs
-Visualize Dijkstra’s Algorithm
-Step-by-step pathfinding
-Interactive UI
-Responsive design
+## Featured Projects
 
-**Technologies Used**
+1. **Graph Shortest Path Visualizer** (`graph_shortest_path.c` & `visualizer.html`) — Pure C99 Dijkstra shortest-path engine with zero external libraries, paired with a step-by-step interactive web visualizer.
+2. **Time Currency** — https://timecurrency.ankab.org/
+3. **Bangladeshi Yin & Yang** — https://bangladeshinews.yay.ankab.org/
+4. **PolComp** — https://polcomp.calculator.ankab.org/
+5. **Salon Project Demo (Maison Lumière)** — https://saloon.ankab.org/
+6. **About Us — Ankab.org** — https://aboutus.ankab.org/
 
-HTML
-CSS
-JavaScript
-C (algorithm implementation concepts)
+## Run the C99 Engine Locally
 
-**Purpose**
-
-This project was developed to better understand graph algorithms and create a visual learning experience for users.
-
-**Live Demo**
-
-https://kennhk.github.io/nasifportfolio/
+```bash
+gcc -std=c99 graph_shortest_path.c -o shortest_path
+./shortest_path
+```

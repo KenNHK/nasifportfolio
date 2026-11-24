@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -9,15 +8,12 @@
 #define INF          INT_MAX
 #define MAX_LABEL    8
 
-
-
 typedef struct {
     int  n_vertices;
     int  n_edges;
-    int  adj[MAX_VERTICES][MAX_VERTICES];  
-    char labels[MAX_VERTICES][MAX_LABEL]; 
+    int  adj[MAX_VERTICES][MAX_VERTICES];
+    char labels[MAX_VERTICES][MAX_LABEL];
 } Graph;
-
 
 void graph_init      (Graph *g);
 void graph_add_edge  (Graph *g, int u, int v, int weight);
@@ -49,14 +45,12 @@ int graph_add_node(Graph *g, const char *label) {
     return idx;
 }
 
-
 int graph_node_index(Graph *g, const char *label) {
     for (int i = 0; i < g->n_vertices; i++)
         if (strcmp(g->labels[i], label) == 0)
             return i;
     return -1;
 }
-
 
 void graph_add_edge(Graph *g, int u, int v, int weight) {
     if (u < 0 || v < 0 || u >= g->n_vertices || v >= g->n_vertices) {
@@ -67,10 +61,9 @@ void graph_add_edge(Graph *g, int u, int v, int weight) {
         fprintf(stderr, "Warning: edge weight should be positive.\n");
     }
     g->adj[u][v] = weight;
-    g->adj[v][u] = weight;   /* undirected */
+    g->adj[v][u] = weight;
     g->n_edges++;
 }
-
 
 void print_graph(Graph *g) {
     printf("\nGraph: %d vertices, %d edges\n", g->n_vertices, g->n_edges);
@@ -87,7 +80,6 @@ void print_graph(Graph *g) {
     printf("--------------------------------------------------\n");
 }
 
-
 void print_path(int prev[], int dst, Graph *g) {
     if (prev[dst] == -1) {
         printf("[%s]", g->labels[dst]);
@@ -97,13 +89,11 @@ void print_path(int prev[], int dst, Graph *g) {
     printf(" -> [%s]", g->labels[dst]);
 }
 
-
 void dijkstra(Graph *g, int src, int dst) {
-    int  dist[MAX_VERTICES];    
-    int  prev[MAX_VERTICES];    
-    bool visited[MAX_VERTICES]; 
+    int  dist[MAX_VERTICES];
+    int  prev[MAX_VERTICES];
+    bool visited[MAX_VERTICES];
 
-   
     for (int i = 0; i < g->n_vertices; i++) {
         dist[i]    = INF;
         prev[i]    = -1;
@@ -113,10 +103,7 @@ void dijkstra(Graph *g, int src, int dst) {
 
     printf("\n  [INIT] dist[%s] = 0, all others = INF\n\n", g->labels[src]);
 
-   
     for (int iter = 0; iter < g->n_vertices - 1; iter++) {
-
-      
         int u   = -1;
         int min = INF;
         for (int i = 0; i < g->n_vertices; i++) {
@@ -126,18 +113,17 @@ void dijkstra(Graph *g, int src, int dst) {
             }
         }
 
-        if (u == -1) break;        
+        if (u == -1) break;
         visited[u] = true;
 
         printf("  [VISIT] node [%s]  dist=%d\n", g->labels[u], dist[u]);
 
-        if (u == dst) break;         
+        if (u == dst) break;
 
-      
         for (int v = 0; v < g->n_vertices; v++) {
-            if (visited[v])        continue; 
-            if (g->adj[u][v] == 0) continue; 
-            if (dist[u] == INF)    continue; 
+            if (visited[v])        continue;
+            if (g->adj[u][v] == 0) continue;
+            if (dist[u] == INF)    continue;
 
             int alt = dist[u] + g->adj[u][v];
 
@@ -167,38 +153,33 @@ void dijkstra(Graph *g, int src, int dst) {
     printf("--------------------------------------------------\n");
 }
 
-
 void run_demo(void) {
     Graph g;
     graph_init(&g);
 
-    
     const char *node_names[] = {"A","B","C","D","E","F","G","H"};
     int n = sizeof(node_names) / sizeof(node_names[0]);
     for (int i = 0; i < n; i++)
         graph_add_node(&g, node_names[i]);
 
-    
-    graph_add_edge(&g, 0, 1,  4);   /* A-B */
-    graph_add_edge(&g, 0, 3,  2);   /* A-D */
-    graph_add_edge(&g, 1, 2,  5);   /* B-C */
-    graph_add_edge(&g, 1, 4, 10);   /* B-E */
-    graph_add_edge(&g, 2, 5,  3);   /* C-F */
-    graph_add_edge(&g, 3, 4,  7);   /* D-E */
-    graph_add_edge(&g, 3, 6,  6);   /* D-G */
-    graph_add_edge(&g, 4, 5,  8);   /* E-F */
-    graph_add_edge(&g, 4, 6,  4);   /* E-G */
-    graph_add_edge(&g, 4, 7,  9);   /* E-H */
-    graph_add_edge(&g, 5, 7,  2);   /* F-H */
-    graph_add_edge(&g, 6, 7,  5);   /* G-H */
+    graph_add_edge(&g, 0, 1,  4);
+    graph_add_edge(&g, 0, 3,  2);
+    graph_add_edge(&g, 1, 2,  5);
+    graph_add_edge(&g, 1, 4, 10);
+    graph_add_edge(&g, 2, 5,  3);
+    graph_add_edge(&g, 3, 4,  7);
+    graph_add_edge(&g, 3, 6,  6);
+    graph_add_edge(&g, 4, 5,  8);
+    graph_add_edge(&g, 4, 6,  4);
+    graph_add_edge(&g, 4, 7,  9);
+    graph_add_edge(&g, 5, 7,  2);
+    graph_add_edge(&g, 6, 7,  5);
 
     print_graph(&g);
 
-    
     printf("\nFinding shortest path: [A] -> [H]\n");
     dijkstra(&g, 0, 7);
 }
-
 
 void run_interactive(void) {
     Graph g;
@@ -262,17 +243,12 @@ void run_interactive(void) {
     dijkstra(&g, src, dst);
 }
 
-
-//banner
-
 void print_banner(void) {
     printf("==================================================\n");
     printf("   Graph Shortest Path — Dijkstra's Algorithm\n");
     printf("   Author: Nasif Hasan\n");
     printf("==================================================\n");
 }
-
-//entry
 
 int main(void) {
     print_banner();
