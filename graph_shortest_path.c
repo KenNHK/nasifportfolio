@@ -246,7 +246,7 @@ void run_interactive(void) {
 void print_banner(void) {
     printf("==================================================\n");
     printf("   Graph Shortest Path — Dijkstra's Algorithm\n");
-    printf("   Author: Nasif Hasan\n");
+    printf("   Author: Nasif Hasan Kabbo\n");
     printf("==================================================\n");
 }
 
@@ -269,7 +269,7 @@ int main(void) {
     }
 
     printf("\n==================================================\n");
-    printf("   Portfolio project by Nasif Hasan\n");
+    printf("   Portfolio project by Nasif Hasan Kabbo\n");
     printf("==================================================\n\n");
 
     return 0;
